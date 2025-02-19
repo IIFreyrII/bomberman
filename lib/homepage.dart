@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'button.dart';
 import 'pixel.dart';
 
+/// `HomePage` es un widget que representa la pantalla principal del juego.
+/// Este juego consiste en un jugador que puede moverse en un grid y colocar bombas
+/// que explotan después de un tiempo, eliminando cajas en el área circundante.
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -11,10 +14,20 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
+/// Estado asociado a `HomePage`.
+/// Gestiona la lógica del juego, como el movimiento del jugador, la colocación de bombas
+/// y la explosión de las mismas.
 class _HomePageState extends State<HomePage> {
+  /// Número total de cuadrados en el grid.
   int numberOfSquares = 130;
+
+  /// Posición actual del jugador en el grid.
   int playerPosition = 0;
+
+  /// Posición de la bomba en el grid. Si no hay bomba, su valor es -1.
   int bombPosition = -1;
+
+  /// Lista de posiciones que representan barreras en el grid.
   List<int> barriers = [
     11,
     13,
@@ -48,6 +61,7 @@ class _HomePageState extends State<HomePage> {
     118
   ];
 
+  /// Lista de posiciones que representan cajas en el grid.
   List<int> boxes = [
     12,
     14,
@@ -87,6 +101,7 @@ class _HomePageState extends State<HomePage> {
     3
   ];
 
+  /// Mueve al jugador hacia arriba en el grid.
   void moveUp() {
     setState(() {
       if (playerPosition - 10 >= 0 &&
@@ -97,6 +112,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  /// Mueve al jugador hacia la izquierda en el grid.
   void moveLeft() {
     setState(() {
       if (!(playerPosition % 10 == 0) &&
@@ -107,6 +123,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  /// Mueve al jugador hacia la derecha en el grid.
   void moveRight() {
     setState(() {
       if (!(playerPosition % 10 == 9) &&
@@ -117,6 +134,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  /// Mueve al jugador hacia abajo en el grid.
   void moveDown() {
     setState(() {
       if (playerPosition + 10 < numberOfSquares &&
@@ -127,8 +145,10 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  /// Lista de posiciones que representan el fuego de la explosión de la bomba.
   List<int> fire = [-1];
 
+  /// Coloca una bomba en la posición actual del jugador.
   void placeBomb() {
     setState(() {
       bombPosition = playerPosition;
@@ -140,13 +160,13 @@ class _HomePageState extends State<HomePage> {
           fire.add(bombPosition + 1);
           fire.add(bombPosition - 10);
           fire.add(bombPosition + 10);
-          
         });
         clearFire();
       });
     });
   }
 
+  /// Limpia el fuego de la explosión después de un tiempo.
   void clearFire() {
     setState(() {
       Timer(Duration(milliseconds: 500), () {
@@ -166,10 +186,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //appBar: AppBar(),
       backgroundColor: Colors.grey[800],
       body: Column(
         children: [
+          // Grid principal del juego.
           Expanded(
             flex: 2,
             child: Container(
@@ -208,12 +228,14 @@ class _HomePageState extends State<HomePage> {
                       );
                     } else {
                       return MyPixel(
-                         innerColor: Colors.green,
-                         outerColor: Colors.green[800],);
+                        innerColor: Colors.green,
+                        outerColor: Colors.green[800],
+                      );
                     }
                   }),
             ),
           ),
+          // Controles del juego.
           Expanded(
             child: Container(
               child: Column(
